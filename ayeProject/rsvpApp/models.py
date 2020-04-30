@@ -15,7 +15,7 @@ class Guest(models.Model):
 
 class Invitation(models.Model):
     invitation_owner_name = models.ForeignKey(Guest, on_delete=models.CASCADE,
-    verbose_name="Relacionar con invitado",)
+    verbose_name="Seleccione el invitado con el cual relacionar la invitación")
     guest_names = models.CharField(max_length=256)
     number_of_guests = models.IntegerField()
     guests_confirmed = models.CharField(max_length=256, null=True)
@@ -28,16 +28,3 @@ class Invitation(models.Model):
 
     class Meta:
         verbose_name_plural = "Invitaciones"
-
-
-class GuestForm(ModelForm):
-    class Meta:
-        model = Guest
-        fields = ['invitation_owner_name', 'email', 'telephone']
-
-
-class GuestForm(ModelForm):
-    class Meta:
-        model = Invitation
-        fields = ['guest_names', 'number_of_guests']
-        exclude = ('guests_confirmed', 'total_guests_confirmed', 'is_RSVP', 'date_RSVP',)
