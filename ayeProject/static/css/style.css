@@ -1833,7 +1833,7 @@ input {
 }
 
 .container-guest-names-list {
-  display:flex;
+  display:grid;
  align-items: center;
  margin-bottom: 10px;
     margin-top: 10px;
