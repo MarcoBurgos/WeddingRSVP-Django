@@ -67,7 +67,7 @@
      $("#btnSearchRegister").html('Cargando...');
        $.ajax({
          type:"GET",
-         url: '/validate_guest/',
+         url: '/ajax_call/',
          data: {
           'email': emailFormForm
         },
@@ -80,7 +80,7 @@
             $('#div-container-guest-names-list').empty().append(guest_names.map((value) => {
               	return $("<div class='container-guest-elements'>" +
                 "<label class='label-sign-up' for='"+ value + "'>"+ value + "</label>" +
-                "<input type='checkbox' id='id_" + value + "'  name='" + value + "' checked='yes' value='"+ value + "'>" +
+                "<input type='checkbox' id='id_" + value + "'  name='" + value + "' checked='no' value='"+ value + "'>" +
                 "</div>");
               }));
             $("#replace_text").html('Hola, ' + name_from_db + ', tienes ' + tickets_from_db + ' boletos disponibles. Marca la casilla de los que asitirán y deja en blanco los invitados que no asistirán' );
@@ -107,14 +107,24 @@
          allGuests.push($(this).val());
      });
 
+     var el = document.getElementsByName("csrfmiddlewaretoken");
+     csrf_value = el[0].getAttribute("value");
+     var emailFormForm = $("#email").val();
+     console.log("Email value is: " + emailFormForm)
+     
+
+
      $.ajax({
        type: "POST",
-       url: "/save_guest_into_db/",
+       url: "/ajax_call/",
        data: {
-         'guests': allGuests
+         'guests': allGuests.toString(),
+         'csrfmiddlewaretoken': csrf_value,
+         'email': emailFormForm
        },
        success: function () {
         console.log("something good")
+        swal("¡Estás confirmado!", "Tu registro ha quedado salvado", "success");
       }
        });
 
@@ -404,7 +414,7 @@
        </div>
      </div>
      <div style="display: none" id="box-guest">
-       <form id="saveGuests" class="sign-up">
+       <form id="saveGuests" class="sign-up" method="post">
          {% csrf_token %}
          <h2 class="sign-up-title">Confirma a tus invitados</h2>
          <h5 id="replace_text" class="intro_guests" style="margin-bottom:15px; font-family: 'Source Sans Pro', Arial, sans-serif;">Hola, {{invitado_nombre}}, tienes {{invitation_num}} boletos disponibles.</h5>
