@@ -10,7 +10,7 @@
  <meta http-equiv="X-UA-Compatible" content="IE=edge">
  <title>A&amp;E Boda </title>
  <meta name="viewport" content="width=device-width, initial-scale=1">
- <meta name="description" content="Boda Andrea y Edgar 15 de Noviembre de 2020" />
+ <meta name="description" content="Boda Andrea y Edgar 31 de Enero de 2021" />
  <meta name="keywords" content="Boda" />
  <meta name="author" content="Marco Burgos" />
 
@@ -61,8 +61,7 @@
  $(document).ready(function() {
    $("#target").submit(function( event ) {
      var emailFormForm = $("#email").val();
-     console.log("Searching")
-     console.log(emailFormForm)
+
 
      $("#btnSearchRegister").html('Cargando...');
        $.ajax({
@@ -76,13 +75,33 @@
             var guest_names = data["guests"].split(",");
             var name_from_db = data["name"];
             var tickets_from_db = data["no_of_guests"];
+            var guests_confirmed = data["confirmed"]
+            if (guests_confirmed) {
+              guests_confirmed = guests_confirmed.split(",")
+              var filtered = guest_names.filter(function(x) {
+                return guests_confirmed.indexOf(x) < 0;
+              });
+              $('#div-container-guest-names-list').empty().append(guests_confirmed.map((value) => {
+                	return $("<div class='container-guest-elements'>" +
+                  "<label class='label-sign-up' for='"+ value + "'>"+ value + "</label>" +
+                  "<input type='checkbox' id='id_" + value + "'  name='" + value + "' checked='yes' value='"+ value + "'>" +
+                  "</div>");
+                }));
+                $('#div-container-guest-names-list').append(filtered.map((value) => {
+                  	return $("<div class='container-guest-elements'>" +
+                    "<label class='label-sign-up' for='"+ value + "'>"+ value + "</label>" +
+                    "<input type='checkbox' id='id_" + value + "'  name='" + value + "' value='"+ value + "'>" +
+                    "</div>");
+                  }));
+            } else {
+              $('#div-container-guest-names-list').empty().append(guest_names.map((value) => {
+                  return $("<div class='container-guest-elements'>" +
+                  "<label class='label-sign-up' for='"+ value + "'>"+ value + "</label>" +
+                  "<input type='checkbox' id='id_" + value + "'  name='" + value + "' value='"+ value + "'>" +
+                  "</div>");
+                }));
+            }
 
-            $('#div-container-guest-names-list').empty().append(guest_names.map((value) => {
-              	return $("<div class='container-guest-elements'>" +
-                "<label class='label-sign-up' for='"+ value + "'>"+ value + "</label>" +
-                "<input type='checkbox' id='id_" + value + "'  name='" + value + "' checked='no' value='"+ value + "'>" +
-                "</div>");
-              }));
             $("#replace_text").html('Hola, ' + name_from_db + ', tienes ' + tickets_from_db + ' boletos disponibles. Marca la casilla de los que asitirán y deja en blanco los invitados que no asistirán' );
             $("#target").hide(300);
             $("#box-guest").show(500);
@@ -104,14 +123,17 @@
      var allGuests = [];
 
      $('input[type="checkbox"]:checked').each(function () {
-         allGuests.push($(this).val());
+        console.log($(this).val().length)
+        if ($(this).val().length>0){
+          allGuests.push($(this).val());
+        }
+
      });
 
      var el = document.getElementsByName("csrfmiddlewaretoken");
      csrf_value = el[0].getAttribute("value");
      var emailFormForm = $("#email").val();
      console.log("Email value is: " + emailFormForm)
-     
 
 
      $.ajax({
@@ -123,8 +145,7 @@
          'email': emailFormForm
        },
        success: function () {
-        console.log("something good")
-        swal("¡Estás confirmado!", "Tu registro ha quedado salvado", "success");
+        swal("¡Gracias por confirmar!", "Tu registro ha quedado salvado", "success");
       }
        });
 
@@ -132,9 +153,7 @@
     $("#box-guest").hide(100);
     $("#subtitle-confirmation").hide(100);
     $("#confirmation-greetings").show(100);
-    //  alert(allVals);
-    console.log(allGuests)
-     event.preventDefault();
+    event.preventDefault();
      });
  });
 </script>
@@ -175,7 +194,7 @@
                <img src="{% static 'images/flaticon/svg/004-nature.svg' %}" class="svg" alt="Fondo Header">
                <h1 class="holder"><span>La boda de </span></h1>
                <h2>Andrea &amp; Edgar</h2>
-               <p>15-11-2020</p>
+               <p>31-01-2021</p>
              </div>
            </div>
          </div>
@@ -189,7 +208,7 @@
      <div class="row animate-box">
        <div class="col-md-8 col-md-offset-2 animate-box">
          <div class="col-md-12 text-center section-heading svg-sm colored">
-           <img src="{% static 'images/flaticon/svg/005-black.svg' %}" class="svg" alt="Fondo section">
+           <img src="{% static 'images/flaticon/svg/005-black.svg' %}" class="svg" alt="Fondo section" style="fill: black !import">
            <h2>¡Nos casamos!</h2>
            <p>Decidimos pasar el resto de nuestras vidas juntos y queremos que formes parte de este evento de unión tan importante para nosotros.
              Será un honor contar con tu presencia.</p>
@@ -222,7 +241,7 @@
          <div class="col-md-12 section-heading text-center svg-sm colored">
            <img src="{% static 'images/flaticon/svg/006-flower-bell-outline-design-variant-with-vines-and-leaves.svg' %}" class="svg" alt="Foto novia">
            <h2 class="">El Día de la Boda</h2>
-           <span class="datewed">Domingo, 15 de Noviembre de 2020</span>
+           <span class="datewed">Domingo, 31 de Enero de 2021</span>
          </div>
        </div>
        <div class="row animate-box">
@@ -304,7 +323,7 @@
                  <div class="date">
                    <i class="icon-calendar"></i>
                    <span>Domingo</span>
-                   <span>15 Nov 2020</span>
+                   <span>31 Ene 2021</span>
                  </div>
                </div>
                <div class="col-md-5 col-md-pull-1">
@@ -336,7 +355,7 @@
                  <div class="date">
                    <i class="icon-calendar"></i>
                    <span>Domingo</span>
-                   <span>15 Nov 2020</span>
+                   <span>31 Ene 2021</span>
                  </div>
                </div>
                <div class="col-md-5 col-md-pull-1">
@@ -384,7 +403,7 @@
            <h2>¡Acompáñanos!</h2>
            <div class="row">
            <div id="subtitle-confirmation" style="display: block" class="col-md-10 col-md-offset-1 subtext">
-             <p>Ingresa tu correo electrónico, busca tu registro y confirma tu asistencia</p>
+             <p style="color: white;">Ingresa tu correo electrónico, busca tu registro y confirma tu asistencia</p>
            </div>
            <div style="display: none" id="confirmation-greetings">
              <p class="greetings">Gracias por confirmar tu asistencia <br>

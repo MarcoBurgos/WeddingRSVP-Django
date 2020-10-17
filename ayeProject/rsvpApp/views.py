@@ -22,6 +22,7 @@ def ajax_call(request):
         if data['is_there']:
             emailID = Invitation.objects.get(email__exact=email)
             data['guests'] = Invitation.objects.get(email=email).guest_names
+            data['confirmed'] = Invitation.objects.get(email=email).guests_confirmed
             data['name'] = Invitation.objects.get(email = email).invitation_owner_name
             data['no_of_guests'] = Invitation.objects.get(email=email).number_of_guests
 
@@ -35,13 +36,18 @@ def ajax_call(request):
 
     else:
         names_to_saved = request.POST.get('guests', None)
+        print(f"ns {names_to_saved}")
         invitation_size = names_to_saved.split(",")
         email = request.POST.get('email', None)
         invitationRecord = Invitation.objects.get(email__exact=email)
 
+        if (names_to_saved):
+            invitationRecord.guests_confirmed = names_to_saved
+            invitationRecord.total_guests_confirmed = len(invitation_size)
+        else:
+            invitationRecord.guests_confirmed = None
+            invitationRecord.total_guests_confirmed = 0
 
-        invitationRecord.guests_confirmed = names_to_saved
-        invitationRecord.total_guests_confirmed = len(invitation_size)
         invitationRecord.is_RSVP = True
         invitationRecord.date_RSVP = (datetime.now()) - (timedelta(hours=4, minutes=00))
         invitationRecord.save()
