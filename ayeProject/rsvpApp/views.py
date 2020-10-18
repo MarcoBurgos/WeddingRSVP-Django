@@ -30,13 +30,10 @@ def ajax_call(request):
             data['error_message'] = 'No existe el correo ingresado en la base de datos.'
 
 
-        print(str(data))
-
         return JsonResponse(data)
 
     else:
         names_to_saved = request.POST.get('guests', None)
-        print(f"ns {names_to_saved}")
         invitation_size = names_to_saved.split(",")
         email = request.POST.get('email', None)
         invitationRecord = Invitation.objects.get(email__exact=email)
