@@ -30,7 +30,7 @@ SECRET_KEY = 'c#pgl!_r9r%(szb)^uw1wzptla28t1#k9j5tg06tw&t@z2arei'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['aye-wedding-stgg.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
